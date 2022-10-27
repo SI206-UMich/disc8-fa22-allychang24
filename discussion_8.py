@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from matplotlib.pyplot import title
 import requests
 import unittest
 
@@ -6,16 +7,21 @@ import unittest
 # search for the url in the University of Michgian wikipedia page (in the third pargraph of the intro)
 # HINT: You will have to add https://en.wikipedia.org to the URL retrieved using BeautifulSoup
 def getLink(soup):
-    Olympics = soup.find('a'), title = "List of American universities with Olympics medalist students"
-    url = 'https://en.wikipedia.org' + Olympics.get ('href')
+    olympics = soup.find('a', title = "List of American universities with Olympic medals")
+    url = 'https://en.wikipedia.org' + olympics.get('href')
     return url
 
 # Task 3: Get the details from the box titled "College/school founding". Get all the college/school names and the year they were
 # founded and organize the same into key-value pairs.
+
+d={}
 def getAdmissionsInfo2019(soup):
-    College = soup.find('a'), 
-    url = 'https://en.wikipedia.org/wiki/University_of_Michigan' + 
-    pass
+    for row in soup.findAll('div', class_='toccolours'):
+        key = row.find('td')
+        value = row.find('td')
+        d[key] = value
+    return d
+    
 
 
 
@@ -26,7 +32,7 @@ def main():
     #### YOUR CODE HERE####
     url = 'https://en.wikipedia.org/wiki/University_of_Michigan'
     r = requests.get(url)
-    soup = BeautifulSoup(r.text, 'html.parser')
+    soup = BeautifulSoup(r.content, 'html.parser')
     #Call the functions getLink(soup) and getAdmissionsInfo2019(soup) on your soup object.
     getLink(soup)
     getAdmissionsInfo2019(soup)
